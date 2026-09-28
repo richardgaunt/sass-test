@@ -1,0 +1,17 @@
+{
+  "name": "sass-test",
+  "private": true,
+  "type": "module",
+  "description": "Shows where -0 and rgb() percentages come from across Dart Sass versions.",
+  "scripts": {
+    "demo": "node compile.mjs"
+  },
+  "devDependencies": {
+    "sass-1.77.5": "npm:sass@1.77.5",
+    "sass-1.79.0": "npm:sass@1.79.0",
+    "sass-1.101.4": "npm:sass@1.101.4",
+    "sass-1.103.1": "npm:sass@1.103.1",
+    "sass-1.104.0": "npm:sass@1.104.0",
+    "sass-1.105.0": "npm:sass@1.105.0"
+  }
+}

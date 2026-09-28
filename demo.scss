@@ -1,0 +1,51 @@
+// Reproduces the two output changes queried on civictheme/uikit#1019.
+// Uses only APIs that compile on every Sass version in package.json.
+
+@use 'sass:color';
+
+// -----------------------------------------------------------------------------
+// 1. Negative zero.
+//
+// Same pattern as ct-highlight-stripe-horizontal() in
+// 00-base/mixins/_highlight.scss: the stripe offset is -$border-width, and the
+// cards pass $border-width: 0.
+
+@mixin stripe($border-width) {
+  left: -$border-width;
+  right: -$border-width;
+}
+
+.negative-zero {
+  @include stripe(0);
+}
+
+// Fix: subtract from zero instead of negating. 0 - 0 is positive zero.
+@mixin stripe-fixed($border-width) {
+  left: 0 - $border-width;
+  right: 0 - $border-width;
+}
+
+.negative-zero-fixed {
+  @include stripe-fixed(0);
+}
+
+// -----------------------------------------------------------------------------
+// 2. rgb() percentages.
+//
+// Same colour maths as storybook.placeholder.utils.stories.scss.
+
+$_color: #548992;
+
+.percentages {
+  // Alpha only: RGB channels stay whole numbers.
+  alpha-only: color.adjust($_color, $alpha: -0.3);
+  // Lightness: converts to HSL and back, so RGB channels become fractions.
+  lightness: color.adjust($_color, $lightness: 50%);
+  lightness-alpha: color.adjust(color.adjust($_color, $lightness: 10%), $alpha: -0.3);
+}
+
+// Fix: pick the colour directly instead of computing it, e.g. with the hex
+// value the old build produced.
+.percentages-fixed {
+  lightness: #eff5f6;
+}
